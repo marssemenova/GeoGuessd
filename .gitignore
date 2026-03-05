@@ -6,4 +6,3 @@ dist
 .cache
 
 /data/images/*
-!/data/images/PUT DATA HERE.txt

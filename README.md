@@ -23,6 +23,12 @@ like this when you've done this:
 method is to use WAMP as this is what was used in development.
 2. The homepage will display TODO
 
+# Notes
+- Since I had a medical emergency I didn't have quite as much time as I would like to work on
+this and I didn't think it would be wise to spend a long time figuring out how to deploy the app properly so
+instead I have written a bash script that does what Node.js or a database would have done and saves the info
+about the data to a `.json` file. Running it once whenever the data is updated is sufficient.
+
 # Citations
 - Some assets taken from [GeoGuessr.com](https://www.geoguessr.com/)
 - [Futura PT Font Family](https://font.download/font/futura-pt)
