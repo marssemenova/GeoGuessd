@@ -10,17 +10,17 @@ for dir in "$data_dir"*/; do
     json_arr+='"'
     file_split=(${file//// })
     json_arr+="${file_split[-1]}"
-    json_arr+='",\n'
+    json_arr+='",\n\t\t'
     ((count++))
   done
-  json_arr="${json_arr:0:-3}]"
-  json+='{\n"country":"'
+  json_arr="${json_arr:0:-7}]"
+  json+='{\n\t"country":"'
   dir_split=(${dir//// })
   json+="${dir_split[-1]}"
-  json+='",\n"num_entries":'
+  json+='",\n\t"num_entries":'
   json+="$count"
-  json+=',\n"entries":'
-  json+="$json_arr},\n"
+  json+=',\n\t"entries":'
+  json+="$json_arr\n},\n"
 done
 json="${json:0:-3}]"
 printf "$json" > $out_file_path
