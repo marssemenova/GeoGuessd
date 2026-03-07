@@ -1,5 +1,4 @@
 // vars
-let mapId = "map";
 let mapContainer = document.getElementById("map-container");
 let mapSVGElement = null;
 let minImgCount = 0, maxImgCount = 0, avgImgCount = 0;
@@ -39,6 +38,16 @@ async function createMap() {
 
   // draw labels
   let dispGrp = svg.append("g").attr("id", "disp-grp");
+  dispGrp.append("rect")
+    .attr("x", 50)
+    .attr("y", 469)
+    .attr("fill", "white")
+    .attr("width", 200)
+    .attr("height", 50)
+    .attr("stroke", "red")
+    .attr("stroke-width", "10px")
+    .attr("rx", "5px")
+    .attr("id", "disp-grp-border");
   dispGrp.append("text")
     .attr("x", 65)
     .attr("y", 500)
@@ -47,16 +56,6 @@ async function createMap() {
     .style("font-size", 20)
     .style("fill", "#000000")
     .attr("id", "disp-grp-txt");
-  dispGrp.append("rect")
-    .attr("x", 50)
-    .attr("y", 469)
-    .attr("fill", "none")
-    .attr("width", 200)
-    .attr("height", 50)
-    .attr("stroke", "red")
-    .attr("stroke-width", "10px")
-    .attr("rx", "5px")
-    .attr("id", "disp-grp-border");
 
   // draw map
   let colorScheme = d3.schemePurples[6];
@@ -96,7 +95,7 @@ async function createMap() {
           d3.select("#disp-grp-txt").text(d.properties.name + " - " + imgsMap.get(d.properties.name).length);
           d3.select("#disp-grp").style("display", "block");
           d3.select("#disp-grp-border").attr("width", document.getElementById("disp-grp-txt").getBBox().width + 30);
-        } 
+        }
       })
       .on("mouseout", function () {
         d3.select("#disp-grp")
@@ -158,6 +157,7 @@ function calcImgMaxMin() {
   }
   avgImgCount /= dataset.length;
 }
+
 /**
  * Create bar graph.
  */
