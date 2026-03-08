@@ -1,6 +1,7 @@
 // global vars
 let dataInfoPath = "/GeoGuessd/data/data-info.json";
 let imgsPath = "/GeoGuessd/data/images/";
+let mapInfoFile = "/GeoGuessd/data/world.geojson";
 let dataset = null;
 let imgsMap = new Map();
 
@@ -9,15 +10,45 @@ let imgsMap = new Map();
  */
 function loadData() {
   return new Promise((resolve) => {
-    d3.json(dataInfoPath).then(function (data) {
+    d3.json(dataInfoPath).then(async function (data) {
       dataset = data;
-      console.log(dataset);
+      await pruneData();
+      dataset.sort(function (a, b) {
+        return b.num_entries - a.num_entries;
+      })
       createImagesMap();
+      console.log(dataset);
       resolve("resolved");
     });
   });
 }
 
+/**
+ * Remove data that isn't compatible with the map.
+ */
+function pruneData() {
+  return new Promise((resolve) => {
+    let countryList = [];
+    d3.json(mapInfoFile).then(function (data) {
+      // extract list of countries
+      for (let x = 0; x < data.features.length; x++) {
+        let country = data.features[x].properties.name;
+        countryList.push(country);
+      }
+
+      // remove from dataset if country not in country list
+      for (let x = 0; x < dataset.length; x++) {
+        let curCountry = dataset[x].country;
+        if (!countryList.includes(curCountry)) {
+          dataset.splice(x, 1);
+          x--;
+        }
+      }
+
+      resolve("resolved");
+    });
+  });
+}
 /**
  * Create a map from countries to arrays of images from the dataset.
  */

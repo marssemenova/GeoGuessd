@@ -1,4 +1,5 @@
-﻿/* map */
+﻿
+/* map */
 #map-container {
   width: 80%;
   margin: auto;
@@ -11,9 +12,48 @@
 
 
 .country-path:hover {
-  fill: red;
+  fill: var(--link-colour);
 }
 
 #disp-grp{
   display: none;
+}
+
+/* chart */
+#chart-container {
+  width: 90%;
+  margin: auto;
+  height: 20vw;
+  background: white;
+}
+
+#chart-container svg {
+  background: white;
+}
+
+#desc-container a, #trainer-txt-container a {
+  text-decoration: none;
+  color: var(--link-colour);
+}
+
+#desc-container p {
+  font-size: 1.3rem;
+}
+
+#desc-container {
+  width: 75%;
+  margin: auto;
+  text-align: center;
+}
+
+#trainer-txt-container p {
+  font-size: 2rem;
+}
+
+#trainer-txt-container {
+  text-align: center;
+  margin: auto;
+  margin-top: 3rem;
+  margin-bottom: 8rem;
+  width: 90%;
 }

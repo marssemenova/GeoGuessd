@@ -1,14 +1,14 @@
 // vars
 let mapContainer = document.getElementById("map-container");
+let chartContainer = document.getElementById("chart-container");
 let mapSVGElement = null;
+let chartSVGElement = null;
 let minImgCount = 0, maxImgCount = 0, avgImgCount = 0;
-let mapInfoFile = "/GeoGuessd/data/world.geojson";
 let countriesGrp = null;
 let mapZoom = null;
 
 // call funcs
 createMap();
-createBarGraph();
 
 /**
  * Create map on homepage.
@@ -101,14 +101,14 @@ async function createMap() {
     svg.call(mapZoom);
 
     // draw labels
-    let dispGrp = svg.append("g").attr("id", "disp-grp").style("z-index", "1").raise();
+    let dispGrp = svg.append("g").attr("id", "disp-grp");
     dispGrp.append("rect")
       .attr("x", 50)
       .attr("y", 519)
       .attr("fill", "white")
       .attr("width", 200)
       .attr("height", 50)
-      .attr("stroke", "red")
+      .attr("stroke", "var(--link-colour)")
       .attr("stroke-width", "10px")
       .attr("rx", "5px")
       .attr("id", "disp-grp-border");
@@ -146,11 +146,13 @@ async function createMap() {
       })
       .attr("y", 600)
       .attr("width", 50)
-      .attr("height", "10")
-      .attr("fill", function(d, i) {
+      .attr("height", 10)
+      .attr("fill", function(d) {
         return colorScale(d-1);
       });
   })
+
+  createBarChart();
 }
 
 /**
@@ -185,6 +187,79 @@ function calcImgMaxMin() {
 /**
  * Create bar graph.
  */
-function createBarGraph() {
+function createBarChart() {
+  // append svg
+  let w = mapContainer.offsetWidth;
+  let h = mapContainer.offsetHeight;
 
+  let svg = d3.select("#chart-container")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h)
+    .attr("viewBox", "0 0 " + w + " " + h)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+    .attr("id", "map-chart");
+  chartSVGElement = document.getElementById("map-chart");
+
+  // set up an observer
+  let observer = new ResizeObserver(entries => {
+    let e = entries[0];
+    chartSVGElement.setAttribute("width", e.contentRect.width);
+    chartSVGElement.setAttribute("height", e.contentRect.height);
+  })
+  observer.observe(chartContainer)
+
+  // draw chart
+  let colorScheme = d3.schemePurples[6];
+  let binSize = avgImgCount/5;
+  let domain = [binSize.toFixed(0), (2*binSize).toFixed(0), (3*binSize).toFixed(0), (4*binSize).toFixed(0), (maxImgCount-1).toFixed(0)];
+  let colorScale = d3.scaleThreshold()
+    .domain(domain)
+    .range(colorScheme);
+
+  let wChart = 2850;
+  svg.append("g").selectAll("rect").data(dataset).enter().append("rect")
+    .attr("x", function(d, i) {
+      return -750 + (i * (wChart / dataset.length));
+    })
+    .attr("y", function(d, i) {
+      return 500 - (400 * (d.num_entries/maxImgCount));
+    })
+    .attr("width", ((wChart / dataset.length) - ((wChart / dataset.length) * 0.2)))
+    .attr("height", function(d, i) {
+      return 400 * (d.num_entries/maxImgCount);
+    })
+    .attr("fill", function(d) {
+      return colorScale(d.num_entries);
+    });
+
+  // draw color scale
+  let scaleTxtGrp = svg.append("g");
+  scaleTxtGrp.selectAll("text").data(domain).enter().append("text")
+    .attr("x", function(d, i) {
+      return 1950 + (i * 50);
+    })
+    .attr("y", 75)
+    .text(d => d)
+    .style("text-anchor", "middle")
+    .style("font-size", 12)
+    .style("fill", "#000000")
+  scaleTxtGrp.append("text")
+    .attr("x", 1900)
+    .attr("y", 75)
+    .text(minImgCount)
+    .style("text-anchor", "middle")
+    .style("font-size", 12)
+    .style("fill", "#000000")
+
+  svg.append("g").selectAll("rect").data(domain).enter().append("rect")
+    .attr("x", function(d, i) {
+      return 1900 + (i * 50);
+    })
+    .attr("y", 50)
+    .attr("width", 50)
+    .attr("height", 10)
+    .attr("fill", function(d) {
+      return colorScale(d-1);
+    });
 }
