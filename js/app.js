@@ -4,6 +4,7 @@ let imgsPath = "/GeoGuessd/data/images/";
 let mapInfoFile = "/GeoGuessd/data/world.geojson";
 let dataset = null;
 let imgsMap = new Map();
+let countryList = null;
 
 /**
  * Load data info from /data/data-info.json.
@@ -13,6 +14,7 @@ function loadData() {
     d3.json(dataInfoPath).then(async function (data) {
       dataset = data;
       await pruneData();
+      // sort + update country list
       dataset.sort(function (a, b) {
         return b.num_entries - a.num_entries;
       })
@@ -28,7 +30,7 @@ function loadData() {
  */
 function pruneData() {
   return new Promise((resolve) => {
-    let countryList = [];
+    countryList = [];
     d3.json(mapInfoFile).then(function (data) {
       // extract list of countries
       for (let x = 0; x < data.features.length; x++) {

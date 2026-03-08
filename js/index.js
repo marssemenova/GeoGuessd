@@ -5,7 +5,7 @@ let mapSVGElement = null;
 let chartSVGElement = null;
 let minImgCount = 0, maxImgCount = 0, avgImgCount = 0;
 let countriesGrp = null;
-let mapZoom = null;
+let chartGrp = null;
 
 // call funcs
 createMap();
@@ -50,9 +50,9 @@ async function createMap() {
     .scale(w / 1.8 / Math.PI)
     .translate([w / 2, h / 2])
 
-  mapZoom = d3.zoom()
+  let mapZoom = d3.zoom()
     .scaleExtent([1, 8])
-    .on("zoom", zoomed);
+    .on("zoom", zoomedMap);
 
   d3.json(mapInfoFile).then(function (data) {
     countriesGrp = svg.append("g");
@@ -104,7 +104,7 @@ async function createMap() {
     let dispGrp = svg.append("g").attr("id", "disp-grp");
     dispGrp.append("rect")
       .attr("x", 50)
-      .attr("y", 519)
+      .attr("y", h - 200)
       .attr("fill", "white")
       .attr("width", 200)
       .attr("height", 50)
@@ -114,7 +114,7 @@ async function createMap() {
       .attr("id", "disp-grp-border");
     dispGrp.append("text")
       .attr("x", 65)
-      .attr("y", 550)
+      .attr("y", h-169)
       .text("Country: x entries")
       .style("text-anchor", "start")
       .style("font-size", 20)
@@ -127,14 +127,14 @@ async function createMap() {
       .attr("x", function(d, i) {
         return 100 + (i * 50);
       })
-      .attr("y", 620)
+      .attr("y", h - 80)
       .text(d => d)
       .style("text-anchor", "middle")
       .style("font-size", 8)
       .style("fill", "#000000")
     scaleTxtGrp.append("text")
       .attr("x", 50)
-      .attr("y", 620)
+      .attr("y", h - 80)
       .text(minImgCount)
       .style("text-anchor", "middle")
       .style("font-size", 8)
@@ -144,7 +144,7 @@ async function createMap() {
       .attr("x", function(d, i) {
         return 50 + (i * 50);
       })
-      .attr("y", 600)
+      .attr("y", h - 100)
       .attr("width", 50)
       .attr("height", 10)
       .attr("fill", function(d) {
@@ -159,7 +159,7 @@ async function createMap() {
  * Function which handles zooming in on the map. From https://observablehq.com/@d3/zoom-to-bounding-box.
  * @param event
  */
-function zoomed(event) {
+function zoomedMap(event) {
   let {transform} = event;
   countriesGrp.attr("transform", transform);
   countriesGrp.attr("stroke-width", 1 / transform.k);
@@ -217,21 +217,61 @@ function createBarChart() {
     .domain(domain)
     .range(colorScheme);
 
+  let chartZoom = d3.zoom()
+    .scaleExtent([1, 8])
+    .on("zoom", zoomedChart);
+
+  let scaleY = d3.scaleLog([1, 10], [100, 3700]);
+
   let wChart = 2850;
-  svg.append("g").selectAll("rect").data(dataset).enter().append("rect")
+  chartGrp = svg.append("g");
+  chartGrp.selectAll("rect").data(dataset).enter().append("rect")
     .attr("x", function(d, i) {
       return -750 + (i * (wChart / dataset.length));
     })
     .attr("y", function(d, i) {
-      return 500 - (400 * (d.num_entries/maxImgCount));
+      return (h-130) - (400 * (scaleY(d.num_entries)/maxImgCount));
     })
     .attr("width", ((wChart / dataset.length) - ((wChart / dataset.length) * 0.2)))
-    .attr("height", function(d, i) {
-      return 400 * (d.num_entries/maxImgCount);
+    .attr("height", function(d) {
+      return 400 * (scaleY(d.num_entries)/maxImgCount);
     })
     .attr("fill", function(d) {
       return colorScale(d.num_entries);
+    })
+    .attr("class", "chart-bar")
+    .on("click", function (e, d) {
+      window.location.href = "/GeoGuessd/pages/gallery.html?country=" + d.country.replaceAll(" ", "%20");
     });
+
+  // draw bar labels
+  chartGrp.append("g").selectAll("text").data(dataset).enter().append("text")
+    .attr("x", function(d, i) {
+      return -738 + (i * (wChart / dataset.length));
+    })
+    .attr("y", function(d) {
+      return (h-135) - (400 * (scaleY(d.num_entries)/maxImgCount));
+    })
+    .text((d) => d.num_entries)
+    .style("text-anchor", "middle")
+    .style("font-size", 10)
+    .style("fill", "#000000");
+
+  // draw x axis labels
+  let scaleX = d3.scaleBand()
+    .domain(imgsMap.keys())
+    .range([-865, 1985]);
+
+  chartGrp.append("g")
+    .attr("transform", "translate(100,100)")
+    .call(d3.axisBottom(scaleX)).attr("color", "transparent")
+    .selectAll("text")
+    .attr("transform", "translate(0," + (h - 230) + ")rotate(-60)")
+    .style("text-anchor", "end")
+    .style("font-size", 12)
+    .style("fill", "black")
+
+  svg.call(chartZoom);
 
   // draw color scale
   let scaleTxtGrp = svg.append("g");
@@ -262,4 +302,14 @@ function createBarChart() {
     .attr("fill", function(d) {
       return colorScale(d-1);
     });
+}
+
+/**
+ * Function which handles zooming in on the chart. From https://observablehq.com/@d3/zoom-to-bounding-box.
+ * @param event
+ */
+function zoomedChart(event) {
+  let {transform} = event;
+  chartGrp.attr("transform", transform);
+  chartGrp.attr("stroke-width", 1 / transform.k);
 }
