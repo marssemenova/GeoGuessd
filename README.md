@@ -38,6 +38,7 @@ and the scope of this project for me to add them myself.
 - [Favicon generator](https://realfavicongenerator.net/)
 - [Map tutorial](https://d3-graph-gallery.com/graph/backgroundmap_basic.html)
 - [world.geojson](https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson)
+- [Map zoom tutorial](https://observablehq.com/@d3/zoom-to-bounding-box)
 
 ## Icons
 - [Back arrow](https://www.flaticon.com/free-icon/back-arrow_3272525?related_id=3272680&origin=search)
