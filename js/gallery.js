@@ -34,6 +34,12 @@ async function loadGallery() {
     newImg.src = imgsPath + country + "/" + img;
     newImg.alt = "Image of " + country + ".";
     newImg.classList.add("gallery-img");
+    newImg.addEventListener("click", function () {
+      console.log("clicked");
+      curImg = i;
+      updateViewer();
+      window.scrollTo(0, 0);
+    })
     galleryContainer.appendChild(newImg);
   });
   createViewer();
