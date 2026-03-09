@@ -1,7 +1,7 @@
 // global vars
 let dataInfoPath = "/GeoGuessd/data/data-info.json";
 let imgsPath = "/GeoGuessd/data/images/";
-let mapInfoFile = "/GeoGuessd/data/world.geojson";
+let mapInfoFile = "/GeoGuessd/data/ne_10m_admin_0_countries.json";
 let dataset = null;
 let imgsMap = new Map();
 let countryList = null;
@@ -34,7 +34,7 @@ function pruneData() {
     d3.json(mapInfoFile).then(function (data) {
       // extract list of countries
       for (let x = 0; x < data.features.length; x++) {
-        let country = data.features[x].properties.name;
+        let country = data.features[x].properties.ADMIN;
         countryList.push(country);
       }
 
@@ -42,6 +42,7 @@ function pruneData() {
       for (let x = 0; x < dataset.length; x++) {
         let curCountry = dataset[x].country;
         if (!countryList.includes(curCountry)) {
+          console.log(curCountry);
           dataset.splice(x, 1);
           x--;
         }

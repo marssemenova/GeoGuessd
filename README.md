@@ -28,8 +28,9 @@ method is to use WAMP as this is what was used in development.
 this and I didn't think it would be wise to spend a long time figuring out how to deploy the app properly so
 instead I have written a bash script that does what Node.js or a database would have done and saves the info
 about the data to a `.json` file. Running it once whenever the data is updated is sufficient.
-- I omitted some regions () since the map didn't have information for them and it is beyond my capabilities
-and the scope of this project for me to add them myself.
+- I omitted some regions (Martinique, Reunion, Svalbard and Jan Mayen) since the map didn't have information for them and it is beyond my capabilities
+and the scope of this project for me to add them myself. Some names in the map data have also been changed to match
+the folder name and may not match the official name.
 - Shifted scale of map TODO
 
 # Citations

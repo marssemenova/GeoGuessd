@@ -41,7 +41,7 @@ async function createMap() {
   // draw map
   let colorScheme = d3.schemePurples[6];
   let binSize = avgImgCount/5;
-  let domain = [binSize.toFixed(0), (2*binSize).toFixed(0), (3*binSize).toFixed(0), (4*binSize).toFixed(0), (maxImgCount-1).toFixed(0)];
+  let domain = [binSize.toFixed(0), (2*binSize).toFixed(0), (3*binSize).toFixed(0), (4*binSize).toFixed(0), maxImgCount.toFixed(0)];
   let colorScale = d3.scaleThreshold()
     .domain(domain)
     .range(colorScheme);
@@ -51,7 +51,7 @@ async function createMap() {
     .translate([w / 2, h / 2])
 
   let mapZoom = d3.zoom()
-    .scaleExtent([1, 8])
+    .scaleExtent([1, 20])
     .on("zoom", zoomedMap);
 
   d3.json(mapInfoFile).then(function (data) {
@@ -61,10 +61,10 @@ async function createMap() {
       .data(data.features)
       .join("path")
       .attr("fill", (d) => {
-        if (!imgsMap.has(d.properties.name)) {
+        if (!imgsMap.has(d.properties.ADMIN)) {
           return "var(--no-data-gray)"
         }
-        return colorScale(imgsMap.get(d.properties.name).length);
+        return colorScale(imgsMap.get(d.properties.ADMIN).length);
       })
       .attr("d", d3.geoPath()
         .projection(projection)
@@ -72,18 +72,18 @@ async function createMap() {
       .style("stroke", "#fff")
       .style("stroke-width", "0.5px")
       .attr("cursor", function (d) {
-        if (imgsMap.has(d.properties.name)) {
+        if (imgsMap.has(d.properties.ADMIN)) {
           return "pointer";
         }
       })
       .attr("class", function (d) {
-        if (imgsMap.has(d.properties.name)) {
+        if (imgsMap.has(d.properties.ADMIN)) {
           return "country-path";
         }
       })
       .on("mouseover", function (e, d) {
-        if (imgsMap.has(d.properties.name)) {
-          d3.select("#disp-grp-txt").text(d.properties.name + " - " + imgsMap.get(d.properties.name).length);
+        if (imgsMap.has(d.properties.ADMIN)) {
+          d3.select("#disp-grp-txt").text(d.properties.ADMIN + " - " + imgsMap.get(d.properties.ADMIN).length);
           d3.select("#disp-grp").style("display", "block");
           d3.select("#disp-grp-border").attr("width", document.getElementById("disp-grp-txt").getBBox().width + 30);
         }
@@ -93,8 +93,8 @@ async function createMap() {
           .style("display", "none");
       })
       .on("click", function (e, d) {
-        if (imgsMap.has(d.properties.name)) {
-          window.location.href = "/GeoGuessd/pages/gallery.html?country=" + d.properties.name.replaceAll(" ", "%20");
+        if (imgsMap.has(d.properties.ADMIN)) {
+          window.location.href = "/GeoGuessd/pages/gallery.html?country=" + d.properties.ADMIN.replaceAll(" ", "%20");
         }
       })
 
@@ -212,13 +212,13 @@ function createBarChart() {
   // draw chart
   let colorScheme = d3.schemePurples[6];
   let binSize = avgImgCount/5;
-  let domain = [binSize.toFixed(0), (2*binSize).toFixed(0), (3*binSize).toFixed(0), (4*binSize).toFixed(0), (maxImgCount-1).toFixed(0)];
+  let domain = [binSize.toFixed(0), (2*binSize).toFixed(0), (3*binSize).toFixed(0), (4*binSize).toFixed(0), maxImgCount.toFixed(0)];
   let colorScale = d3.scaleThreshold()
     .domain(domain)
     .range(colorScheme);
 
   let chartZoom = d3.zoom()
-    .scaleExtent([1, 8])
+    .scaleExtent([1, 2])
     .on("zoom", zoomedChart);
 
   let scaleY = d3.scaleLog([1, 10], [100, 3700]);
@@ -230,7 +230,7 @@ function createBarChart() {
       return -750 + (i * (wChart / dataset.length));
     })
     .attr("y", function(d, i) {
-      return (h-130) - (400 * (scaleY(d.num_entries)/maxImgCount));
+      return (h-150) - (400 * (scaleY(d.num_entries)/maxImgCount));
     })
     .attr("width", ((wChart / dataset.length) - ((wChart / dataset.length) * 0.2)))
     .attr("height", function(d) {
@@ -250,7 +250,7 @@ function createBarChart() {
       return -738 + (i * (wChart / dataset.length));
     })
     .attr("y", function(d) {
-      return (h-135) - (400 * (scaleY(d.num_entries)/maxImgCount));
+      return (h-155) - (400 * (scaleY(d.num_entries)/maxImgCount));
     })
     .text((d) => d.num_entries)
     .style("text-anchor", "middle")
@@ -258,15 +258,18 @@ function createBarChart() {
     .style("fill", "#000000");
 
   // draw x axis labels
+  let countries = Array.from(imgsMap.keys());
+  let longNameIndex = countries.findIndex(d => d === "South Georgia and South Sandwich Islands"); // change South Georgia and South Sandwich Islands to South Georgia and the Islands
+  countries[longNameIndex] = "South Georgia & the Islands";
   let scaleX = d3.scaleBand()
-    .domain(imgsMap.keys())
+    .domain(countries)
     .range([-865, 1985]);
 
   chartGrp.append("g")
     .attr("transform", "translate(100,100)")
     .call(d3.axisBottom(scaleX)).attr("color", "transparent")
     .selectAll("text")
-    .attr("transform", "translate(0," + (h - 230) + ")rotate(-60)")
+    .attr("transform", "translate(0," + (h - 250) + ")rotate(-60)")
     .style("text-anchor", "end")
     .style("font-size", 12)
     .style("fill", "black")
