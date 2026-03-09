@@ -273,6 +273,7 @@ function createBarChart() {
     .style("text-anchor", "end")
     .style("font-size", 12)
     .style("fill", "black")
+    .style("fill", "black")
 
   svg.call(chartZoom);
 

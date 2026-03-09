@@ -65,3 +65,7 @@
 svg text:hover {
   cursor: default;
 }
+
+svg text {
+  font-family: 'ggFont', sans-serif;
+}
