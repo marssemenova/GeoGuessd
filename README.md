@@ -1,7 +1,9 @@
 # GeoGuessd - A GeoGuessr Trainer
 ###### CSCI4166 Project Winter 2026
 
-TODO
+This project implements a visualization of the distribution of images across countries in [GeoGuessr](https://www.geoguessr.com/),
+a popular online game where a player tries to determine the exact location an image was taken. This is also accompanied by
+a training tool which keeps track of performance and visualizes it.
 
 ## Setup
 
@@ -21,7 +23,7 @@ like this when you've done this:
 # Usage
 1. You will need to run a local server to display the webpage. There are many ways to do this but the suggested
 method is to use WAMP as this is what was used in development.
-2. The homepage will display TODO
+2. Open `index.html` to view the homepage.
 
 # Notes
 - Since I had a medical emergency I didn't have quite as much time as I would like to work on
@@ -31,14 +33,15 @@ about the data to a `.json` file. Running it once whenever the data is updated i
 - I omitted some regions (Martinique, Reunion, Svalbard and Jan Mayen) since the map didn't have information for them and it is beyond my capabilities
 and the scope of this project for me to add them myself. Some names in the map data have also been changed to match
 the folder name and may not match the official name.
-- Shifted scale of map TODO
+- Since the highest number of entries is significantly higher than the number of entries for all the other countries
+everything is scaled logarithmically.
 
 # Citations
 - Some assets taken from [GeoGuessr.com](https://www.geoguessr.com/)
 - [Futura PT Font Family](https://font.download/font/futura-pt)
 - [Favicon generator](https://realfavicongenerator.net/)
 - [Map tutorial](https://d3-graph-gallery.com/graph/backgroundmap_basic.html)
-- [world.geojson](https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson)
+- [ne_10m_admin_0_countries.json](https://github.com/martynafford/natural-earth-geojson/tree/master/10m/cultural)
 - [Map zoom tutorial](https://observablehq.com/@d3/zoom-to-bounding-box)
 
 ## Icons
