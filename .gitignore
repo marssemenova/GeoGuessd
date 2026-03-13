@@ -5,4 +5,5 @@ node_modules
 dist
 .cache
 
-/data/images/
+/data/images/*
+!/data/images/PUT_DATA_HERE.txt
