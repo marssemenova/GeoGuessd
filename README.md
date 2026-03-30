@@ -1,5 +1,5 @@
 # GeoGuessd - A GeoGuessr Trainer
-###### CSCI4166 Project Winter 2026
+###### CSCI4166 project Winter 2026
 
 This project implements a visualization of the distribution of images across countries in [GeoGuessr](https://www.geoguessr.com/),
 a popular online game where a player tries to determine the exact location an image was taken. This is also accompanied by
