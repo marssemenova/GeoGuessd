@@ -47,3 +47,4 @@ everything is scaled logarithmically.
 ## Icons
 - [Back arrow](https://www.flaticon.com/free-icon/back-arrow_3272525?related_id=3272680&origin=search)
 - [Next/prev arrow](https://www.flaticon.com/free-icon/back-arrow_11488614?term=left+arrow&page=1&position=41&origin=search&related_id=11488614)
+- [Placeholder image](https://www.flaticon.com/free-icon/no-pictures_5762943)

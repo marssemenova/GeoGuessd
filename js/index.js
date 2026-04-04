@@ -221,20 +221,21 @@ function createBarChart() {
     .scaleExtent([1, 2])
     .on("zoom", zoomedChart);
 
-  let scaleY = d3.scaleLog([1, 10], [100, 3700]);
+  let scaleY = d3.scaleLog([1, 10], [100, 3000]);
 
-  let wChart = 2850;
+  let wChart = 2500;
+  let barH = 350
   chartGrp = svg.append("g");
   chartGrp.selectAll("rect").data(dataset).enter().append("rect")
     .attr("x", function(d, i) {
-      return -750 + (i * (wChart / dataset.length));
+      return -650 + (i * (wChart / dataset.length));
     })
     .attr("y", function(d, i) {
-      return (h-150) - (400 * (scaleY(d.num_entries)/maxImgCount));
+      return (h-175) - (barH * (scaleY(d.num_entries)/maxImgCount));
     })
     .attr("width", ((wChart / dataset.length) - ((wChart / dataset.length) * 0.2)))
     .attr("height", function(d) {
-      return 400 * (scaleY(d.num_entries)/maxImgCount);
+      return barH * (scaleY(d.num_entries)/maxImgCount);
     })
     .attr("fill", function(d) {
       return colorScale(d.num_entries);
@@ -247,29 +248,27 @@ function createBarChart() {
   // draw bar labels
   chartGrp.append("g").selectAll("text").data(dataset).enter().append("text")
     .attr("x", function(d, i) {
-      return -738 + (i * (wChart / dataset.length));
+      return -642 + (i * (wChart / dataset.length));
     })
     .attr("y", function(d) {
-      return (h-155) - (400 * (scaleY(d.num_entries)/maxImgCount));
+      return (h-179) - (barH * (scaleY(d.num_entries)/maxImgCount));
     })
     .text((d) => d.num_entries)
     .style("text-anchor", "middle")
-    .style("font-size", 10)
+    .style("font-size", 8)
     .style("fill", "#000000");
 
   // draw x axis labels
   let countries = Array.from(imgsMap.keys());
-  let longNameIndex = countries.findIndex(d => d === "South Georgia and South Sandwich Islands"); // change South Georgia and South Sandwich Islands to South Georgia and the Islands
-  countries[longNameIndex] = "South Georgia & the Islands";
   let scaleX = d3.scaleBand()
     .domain(countries)
-    .range([-865, 1985]);
+    .range([-765, wChart-765]);
 
   chartGrp.append("g")
     .attr("transform", "translate(100,100)")
     .call(d3.axisBottom(scaleX)).attr("color", "transparent")
     .selectAll("text")
-    .attr("transform", "translate(0," + (h - 250) + ")rotate(-60)")
+    .attr("transform", "translate(0," + (h - 275) + ")rotate(-60)")
     .style("text-anchor", "end")
     .style("font-size", 12)
     .style("fill", "black")
@@ -281,7 +280,7 @@ function createBarChart() {
   let scaleTxtGrp = svg.append("g");
   scaleTxtGrp.selectAll("text").data(domain).enter().append("text")
     .attr("x", function(d, i) {
-      return 1950 + (i * 50);
+      return 1500 + (i * 50);
     })
     .attr("y", 75)
     .text(d => d)
@@ -289,7 +288,7 @@ function createBarChart() {
     .style("font-size", 12)
     .style("fill", "#000000")
   scaleTxtGrp.append("text")
-    .attr("x", 1900)
+    .attr("x", 1450)
     .attr("y", 75)
     .text(minImgCount)
     .style("text-anchor", "middle")
@@ -298,7 +297,7 @@ function createBarChart() {
 
   svg.append("g").selectAll("rect").data(domain).enter().append("rect")
     .attr("x", function(d, i) {
-      return 1900 + (i * 50);
+      return 1450 + (i * 50);
     })
     .attr("y", 50)
     .attr("width", 50)

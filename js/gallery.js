@@ -1,10 +1,10 @@
 // vars
 let country = getUrlVars()["country"].replaceAll("%20", " ");
 let imgs = null;
-let viewerImg = document.getElementById("curr-img");
+let imgViewer = document.getElementById("curr-img");
 let prevBtn = document.getElementById("prev-icon");
 let nextBtn = document.getElementById("next-icon");
-let curImg = 0;
+let currImg = 0;
 
 // call funcs
 setCountryName();
@@ -36,7 +36,7 @@ async function loadGallery() {
     newImg.classList.add("gallery-img");
     newImg.addEventListener("click", function () {
       console.log("clicked");
-      curImg = i;
+      currImg = i;
       updateViewer();
       window.scrollTo(0, 0);
     })
@@ -50,19 +50,16 @@ async function loadGallery() {
  */
 function createViewer() {
   // set first image
-  viewerImg = document.createElement("img");
-  document.getElementById("img-viewer").append(viewerImg);
-  viewerImg.id = "curr-img";
-  viewerImg.src = imgsPath + country + "/" + imgs[curImg];
-  viewerImg.alt = "Image of " + country + ".";
+  imgViewer.src = imgsPath + country + "/" + imgs[currImg];
+  imgViewer.alt = "Image of " + country + ".";
 
   // add event listeners to next/prev btns
   nextBtn.addEventListener("click", function(e) {
-    curImg++;
+    currImg++;
     updateViewer();
   });
   prevBtn.addEventListener("click", function(e) {
-    curImg--;
+    currImg--;
     updateViewer();
   });
 }
@@ -74,12 +71,12 @@ function createViewer() {
 function updateViewer() {
   // clamp
   let max = imgs.length - 1;
-  if (curImg < 0) {
-    curImg = max;
+  if (currImg < 0) {
+    currImg = max;
   }
-  if (curImg > max) {
-    curImg = 0;
+  if (currImg > max) {
+    currImg = 0;
   }
 
-  viewerImg.src = imgsPath + country + "/" + imgs[curImg];
+  imgViewer.src = imgsPath + country + "/" + imgs[currImg];
 }

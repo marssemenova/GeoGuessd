@@ -1,0 +1,36 @@
+﻿.hide-element {
+  display: none;
+}
+
+.no-history-err {
+  margin: 0;
+}
+
+#session-data-container p {
+  margin: 0;
+}
+
+/* chart */
+#chart-container {
+  width: 90%;
+  margin: auto;
+  height: 20vw;
+  background: white;
+}
+
+#chart-container svg {
+  background: white;
+}
+
+.chart-bar:hover {
+  fill: var(--link-colour);
+  cursor: pointer;
+}
+
+svg text:hover {
+  cursor: default;
+}
+
+svg text {
+  font-family: 'ggFont', sans-serif;
+}

@@ -5,6 +5,7 @@ let mapInfoFile = "/GeoGuessd/data/ne_10m_admin_0_countries.json";
 let dataset = null;
 let imgsMap = new Map();
 let countryList = null;
+let sessionHistory = [];
 
 /**
  * Load data info from /data/data-info.json.
@@ -19,6 +20,7 @@ function loadData() {
         return b.num_entries - a.num_entries;
       })
       createImagesMap();
+      console.log("Dataset:")
       console.log(dataset);
       resolve("resolved");
     });
@@ -35,14 +37,20 @@ function pruneData() {
       // extract list of countries
       for (let x = 0; x < data.features.length; x++) {
         let country = data.features[x].properties.ADMIN;
+        if (country === "South Georgia and South Sandwich Islands") { // change South Georgia and South Sandwich Islands to South Georgia and the Islands
+          country = "South Georgia and the Islands";
+        }
         countryList.push(country);
       }
 
       // remove from dataset if country not in country list
       for (let x = 0; x < dataset.length; x++) {
-        let curCountry = dataset[x].country;
-        if (!countryList.includes(curCountry)) {
-          console.log(curCountry);
+        let currCountry = dataset[x].country;
+        if (currCountry === "South Georgia and South Sandwich Islands" && countryList.includes("South Georgia and the Islands")) { // change South Georgia and South Sandwich Islands to South Georgia and the Islands
+          currCountry = "South Georgia and the Islands";
+          dataset[x].country = currCountry;
+        }
+        if (!countryList.includes(currCountry)) {
           dataset.splice(x, 1);
           x--;
         }
@@ -52,6 +60,7 @@ function pruneData() {
     });
   });
 }
+
 /**
  * Create a map from countries to arrays of images from the dataset.
  */
@@ -60,6 +69,20 @@ function createImagesMap() {
     let currObj = dataset[x];
     imgsMap.set(currObj.country, currObj.entries);
   }
+}
+
+/**
+ * Load user session history from local storage.
+ */
+function loadSessionHistory(){
+  sessionHistory = localStorage.getItem("sessionHistory");
+  if (sessionHistory === null) {
+    sessionHistory = [];
+  } else {
+    sessionHistory = JSON.parse(sessionHistory);
+  }
+  console.log("Loaded session history:")
+  console.log(sessionHistory);
 }
 
 /**
