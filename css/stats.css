@@ -1,24 +1,26 @@
 ﻿.hide-element {
   display: none;
 }
-
-.no-history-err {
-  margin: 0;
+#no-history-err-container {
+  padding-top: 4rem;
+  margin: auto;
+  width: fit-content;
 }
 
-#session-data-container p {
+#no-history-err {
   margin: 0;
+  font-size: 2rem;
 }
 
-/* chart */
-#chart-container {
+/* stats chart */
+#stats-chart-container {
   width: 90%;
   margin: auto;
   height: 20vw;
   background: white;
 }
 
-#chart-container svg {
+#stats-chart-container svg {
   background: white;
 }
 
@@ -28,4 +30,22 @@ svg text:hover {
 
 svg text {
   font-family: 'ggFont', sans-serif;
+}
+
+#sort-type-container {
+  display: flex;
+  align-items: center;
+  padding-left: 5%;
+  padding-top: 1rem;
+}
+
+#sort-btn {
+  font-size: 0.7rem !important;
+  padding: 0.3rem 0.8rem;
+}
+
+#sort-type-text {
+  font-size: 0.8rem;
+  padding-left: 0.5rem;
+  font-style: italic;
 }

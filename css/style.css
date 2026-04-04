@@ -99,3 +99,49 @@ nav ul li a {
 .nav-shift {
   transform: translate(0, 5rem);
 }
+
+/* btns */
+.btn {
+  padding: 0.5rem 1rem;
+  width: fit-content;
+  border-radius: 2rem;
+  border: 0.1rem solid white;
+  user-select: none;
+}
+
+.green-btn-active:hover, .red-btn-active:hover {
+  cursor: pointer;
+  text-shadow: 0 0.0625rem 0.125rem #171235;
+}
+
+.green-btn-active {
+  border-color: var(--link-colour) !important;
+}
+
+.green-btn-active:hover {
+  background: var(--link-colour);
+}
+
+.red-btn-active {
+  border-color: red !important;
+}
+
+.red-btn-active:hover {
+  background: red;
+}
+
+.white-btn-active {
+  border-color: white;
+}
+
+.white-btn-active:hover {
+  cursor: pointer;
+  background: white;
+  color: var(--purp);
+  text-shadow: none !important;
+}
+
+.inactive-btn {
+  color: var(--inactive-gray);
+  border-color: var(--inactive-gray) !important;
+}
