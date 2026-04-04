@@ -1,23 +1,84 @@
-﻿// call funcs
+﻿// vars
+let chartContainer = document.getElementById("chart-container");
+let countryStats = new Map();
+let minAnswerCount = 0, maxAnswerCount = 0;
+let chartSVGElement = null;
+let chartGrp = null;
+let sortFunc = 0;
+let sortByNumAnswers = function (a, b) {
+  let aAns = a[1].correct + a[1].wrong;
+  let bAns = b[1].correct + b[1].wrong;
+  if (aAns !== bAns) {
+    return aAns < bAns ? 1 : -1;
+  } else {
+    return a[0] > b[0] ? 1 : -1;
+  }
+}
+
+// call funcs
 setContent();
 
 async function setContent() {
   loadSessionHistory();
   if (sessionHistory !== []) {
     await loadData();
-    loadSessionHistory();
+    if (debug) {
+      sessionHistory = getDummySessionHistory(10);
+    }
     document.getElementById("no-history-err").classList.add("hide-element");
     document.getElementById("session-data-container").classList.remove("hide-element");
+    processCountryStats();
   }
 }
 
-/**
- * Create bar graph.
- */
+function processCountryStats() {
+  for (let x = 0; x < countryList.length; x++) {
+    let currCountry = countryList[x];
+    let newEntry = {
+      "country": currCountry,
+      "correct": 0,
+      "wrong": 0
+    }
+    countryStats.set(currCountry, newEntry);
+  }
+
+  for (let x = 0; x < sessionHistory.length; x++) {
+    let session = sessionHistory[x];
+    for (let i = 0; i < session.answers.length; i++) {
+      let ans = session.answers[i];
+      ans.correct ? countryStats.get(ans.country).correct++ : countryStats.get(ans.country).wrong++;
+    }
+  }
+
+  minAnswerCount = countryStats.get(countryList[0]).correct + countryStats.get(countryList[0]).wrong;
+  maxAnswerCount = minAnswerCount;
+
+  for (let x = 0; x < countryList.length; x++) {
+    let currCountry = countryList[x];
+    let currCountryStats = countryStats.get(currCountry);
+    let numAnswers = currCountryStats.correct + currCountryStats.wrong;
+    if (numAnswers > maxAnswerCount) {
+      maxAnswerCount = numAnswers;
+    }
+    if (numAnswers < minAnswerCount) {
+      minAnswerCount = numAnswers;
+    }
+  }
+
+  createBarChart(sortByNumAnswers);
+}
+
 function createBarChart() {
+  drawBarChart(sortByNumAnswers);
+}
+
+/**
+ * Create bar chart.
+ */
+function drawBarChart(sortFunc) {
   // append svg
-  let w = mapContainer.offsetWidth;
-  let h = mapContainer.offsetHeight;
+  let w = chartContainer.offsetWidth;
+  let h = chartContainer.offsetHeight;
 
   let svg = d3.select("#chart-container")
     .append("svg")
@@ -37,101 +98,76 @@ function createBarChart() {
   observer.observe(chartContainer)
 
   // draw chart
-  let colorScheme = d3.schemePurples[6];
-  let binSize = avgImgCount/5;
-  let domain = [binSize.toFixed(0), (2*binSize).toFixed(0), (3*binSize).toFixed(0), (4*binSize).toFixed(0), maxImgCount.toFixed(0)];
-  let colorScale = d3.scaleThreshold()
-    .domain(domain)
-    .range(colorScheme);
+  let statsData = Array.from(countryStats);
+  statsData.sort(sortFunc);
 
   let chartZoom = d3.zoom()
     .scaleExtent([1, 2])
     .on("zoom", zoomedChart);
 
-  let scaleY = d3.scaleLog([1, 10], [100, 3000]);
-
-  let wChart = 2500;
-  let barH = 350
+  let wChart = w - 100;
+  let barH = 150;
   chartGrp = svg.append("g");
-  chartGrp.selectAll("rect").data(dataset).enter().append("rect")
+  chartGrp.append("g").selectAll("rect").data(statsData).enter().append("rect")
     .attr("x", function(d, i) {
-      return -650 + (i * (wChart / dataset.length));
-    })
-    .attr("y", function(d, i) {
-      return (h-175) - (barH * (scaleY(d.num_entries)/maxImgCount));
-    })
-    .attr("width", ((wChart / dataset.length) - ((wChart / dataset.length) * 0.2)))
-    .attr("height", function(d) {
-      return barH * (scaleY(d.num_entries)/maxImgCount);
-    })
-    .attr("fill", function(d) {
-      return colorScale(d.num_entries);
-    })
-    .attr("class", "chart-bar")
-    .on("click", function (e, d) {
-      window.location.href = "/GeoGuessd/pages/gallery.html?country=" + d.country.replaceAll(" ", "%20");
-    });
-
-  // draw bar labels
-  chartGrp.append("g").selectAll("text").data(dataset).enter().append("text")
-    .attr("x", function(d, i) {
-      return -642 + (i * (wChart / dataset.length));
+      return 50 + (i * (wChart / countryList.length));
     })
     .attr("y", function(d) {
-      return (h-179) - (barH * (scaleY(d.num_entries)/maxImgCount));
+      return (h-125) - (barH * ((d[1].correct + d[1].wrong)/maxAnswerCount) * (d[1].correct/(d[1].correct + d[1].wrong)));
     })
-    .text((d) => d.num_entries)
+    .attr("width", ((wChart / countryList.length) - ((wChart / countryList.length) * 0.2)))
+    .attr("height", function(d) {
+      return barH * ((d[1].correct + d[1].wrong)/maxAnswerCount) * (d[1].correct/(d[1].correct + d[1].wrong));
+    })
+    .attr("fill", function() {
+      return "red";
+    })
+    .attr("class", "chart-bar");
+  chartGrp.append("g").selectAll("rect").data(statsData).enter().append("rect")
+    .attr("x", function(d, i) {
+      return 50 + (i * (wChart / countryList.length));
+    })
+    .attr("y", function(d) {
+      return (h-125) - (barH * ((d[1].correct + d[1].wrong)/maxAnswerCount) * (d[1].correct/(d[1].correct + d[1].wrong))) - barH * ((d[1].correct + d[1].wrong)/maxAnswerCount) * (d[1].wrong/(d[1].correct + d[1].wrong));
+    })
+    .attr("width", ((wChart / countryList.length) - ((wChart / countryList.length) * 0.2)))
+    .attr("height", function(d) {
+      return barH * ((d[1].correct + d[1].wrong)/maxAnswerCount) * (d[1].wrong/(d[1].correct + d[1].wrong));
+    })
+    .attr("fill", function() {
+      return "var(--link-colour)";
+    })
+    .attr("class", "chart-bar");
+
+  // draw bar labels
+  chartGrp.append("g").selectAll("text").data(statsData).enter().append("text")
+    .attr("x", function(d, i) {
+      return 54 + (i * (wChart / countryList.length));
+    })
+    .attr("y", function(d) {
+      return (h-128) - (barH * ((d[1].correct + d[1].wrong)/maxAnswerCount));
+    })
+    .text((d) => (d[1].correct + d[1].wrong))
     .style("text-anchor", "middle")
-    .style("font-size", 8)
+    .style("font-size", 4)
     .style("fill", "#000000");
 
   // draw x axis labels
-  let countries = Array.from(imgsMap.keys());
   let scaleX = d3.scaleBand()
-    .domain(countries)
-    .range([-765, wChart-765]);
+    .domain(Array.from(statsData, (el) => el[0]))
+    .range([-62, wChart-62]);
 
   chartGrp.append("g")
     .attr("transform", "translate(100,100)")
     .call(d3.axisBottom(scaleX)).attr("color", "transparent")
     .selectAll("text")
-    .attr("transform", "translate(0," + (h - 275) + ")rotate(-60)")
+    .attr("transform", "translate(0," + (h - 225) + ")rotate(-60)")
     .style("text-anchor", "end")
-    .style("font-size", 12)
+    .style("font-size", 8)
     .style("fill", "black")
     .style("fill", "black")
 
   svg.call(chartZoom);
-
-  // draw color scale
-  let scaleTxtGrp = svg.append("g");
-  scaleTxtGrp.selectAll("text").data(domain).enter().append("text")
-    .attr("x", function(d, i) {
-      return 1500 + (i * 50);
-    })
-    .attr("y", 75)
-    .text(d => d)
-    .style("text-anchor", "middle")
-    .style("font-size", 12)
-    .style("fill", "#000000")
-  scaleTxtGrp.append("text")
-    .attr("x", 1450)
-    .attr("y", 75)
-    .text(minImgCount)
-    .style("text-anchor", "middle")
-    .style("font-size", 12)
-    .style("fill", "#000000")
-
-  svg.append("g").selectAll("rect").data(domain).enter().append("rect")
-    .attr("x", function(d, i) {
-      return 1450 + (i * 50);
-    })
-    .attr("y", 50)
-    .attr("width", 50)
-    .attr("height", 10)
-    .attr("fill", function(d) {
-      return colorScale(d-1);
-    });
 }
 
 /**

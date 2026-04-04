@@ -1,3 +1,5 @@
+let debug = true;
+
 // global vars
 let dataInfoPath = "/GeoGuessd/data/data-info.json";
 let imgsPath = "/GeoGuessd/data/images/";
@@ -69,6 +71,8 @@ function createImagesMap() {
     let currObj = dataset[x];
     imgsMap.set(currObj.country, currObj.entries);
   }
+
+  countryList = Array.from(imgsMap.keys());
 }
 
 /**
@@ -100,4 +104,37 @@ function getUrlVars() {
     vars[hash[0]] = hash[1];
   }
   return vars;
+}
+
+/**
+ * Helper method to generate dummy session data.
+ * @param numSessions Number of sessions.
+ * @returns JSON object of session data.
+ */
+function getDummySessionHistory(numSessions){
+  let dummySessionHistory = [];
+  for (let x = 0; x < numSessions; x++) {
+    let numAnswers = Math.floor(Math.random() * 9) + 1;
+    let currAnswers = [];
+    let correct = 0, wrong = 0;
+    for (let i = 0; i < numAnswers; i++) {
+      let currCountry = countryList[Math.floor(Math.random() * countryList.length)];
+      let isCorrect = !!Math.floor(Math.random() * 2);
+      currAnswers.push({
+        "country" : currCountry,
+        "correct" : isCorrect
+      });
+      isCorrect ? correct++ : wrong++;
+    }
+    let newEntry = {
+      "time" : (new Date()).toJSON(),
+      "correct" : correct,
+      "wrong" : wrong,
+      "answers" : currAnswers
+    }
+    dummySessionHistory.unshift(newEntry);
+  }
+  console.log("Loaded dummy session history:")
+  console.log(dummySessionHistory);
+  return dummySessionHistory;
 }

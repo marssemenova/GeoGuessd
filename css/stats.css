@@ -22,11 +22,6 @@
   background: white;
 }
 
-.chart-bar:hover {
-  fill: var(--link-colour);
-  cursor: pointer;
-}
-
 svg text:hover {
   cursor: default;
 }

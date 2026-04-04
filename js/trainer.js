@@ -22,9 +22,8 @@ eventHandlingSetup();
  * Create a set of pairs of image files and their country.
  */
 function createImgsSet() {
-  let countries = Array.from(imgsMap.keys());
   imgsSet = [];
-  for (let country of countries) {
+  for (let country of countryList) {
     let currImgs = imgsMap.get(country);
     for (let img of currImgs) {
       imgsSet.push({
@@ -127,7 +126,7 @@ function checkAnswer(answer) {
   let isCorrect = answer.trim().toLowerCase() === currCountry.trim().toLowerCase();
   answers.push({
     "country" : currCountry,
-    "answer" : isCorrect
+    "correct" : isCorrect
   });
   textbox.value = currCountry;
   if (isCorrect) {

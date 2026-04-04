@@ -41,7 +41,7 @@ async function createMap() {
   // draw map
   let colorScheme = d3.schemePurples[6];
   let binSize = avgImgCount/5;
-  let domain = [binSize.toFixed(0), (2*binSize).toFixed(0), (3*binSize).toFixed(0), (4*binSize).toFixed(0), maxImgCount.toFixed(0)];
+  let domain = [minImgCount-1, binSize.toFixed(0)-1, (2*binSize).toFixed(0)-1, (3*binSize).toFixed(0)-1, (4*binSize).toFixed(0)-1, maxImgCount.toFixed(0)-1];
   let colorScale = d3.scaleThreshold()
     .domain(domain)
     .range(colorScheme);
@@ -125,30 +125,27 @@ async function createMap() {
     let scaleTxtGrp = svg.append("g");
     scaleTxtGrp.selectAll("text").data(domain).enter().append("text")
       .attr("x", function(d, i) {
-        return 100 + (i * 50);
+        return 50 + (i * 35);
       })
       .attr("y", h - 80)
-      .text(d => d)
-      .style("text-anchor", "middle")
-      .style("font-size", 8)
-      .style("fill", "#000000")
-    scaleTxtGrp.append("text")
-      .attr("x", 50)
-      .attr("y", h - 80)
-      .text(minImgCount)
+      .text(d => d+1)
       .style("text-anchor", "middle")
       .style("font-size", 8)
       .style("fill", "#000000")
 
     svg.append("g").selectAll("rect").data(domain).enter().append("rect")
       .attr("x", function(d, i) {
-        return 50 + (i * 50);
+        return 50 + (i * 35);
       })
       .attr("y", h - 100)
-      .attr("width", 50)
-      .attr("height", 10)
-      .attr("fill", function(d) {
-        return colorScale(d-1);
+      .attr("width", 35)
+      .attr("height", 7)
+      .attr("fill", function(d, i) {
+        if (i < domain.length - 1) {
+          return colorScale(d);
+        } else {
+          return "transparent";
+        }
       });
   })
 
@@ -185,12 +182,12 @@ function calcImgMaxMin() {
 }
 
 /**
- * Create bar graph.
+ * Create bar chart.
  */
 function createBarChart() {
   // append svg
-  let w = mapContainer.offsetWidth;
-  let h = mapContainer.offsetHeight;
+  let w = chartContainer.offsetWidth;
+  let h = chartContainer.offsetHeight;
 
   let svg = d3.select("#chart-container")
     .append("svg")
@@ -212,7 +209,7 @@ function createBarChart() {
   // draw chart
   let colorScheme = d3.schemePurples[6];
   let binSize = avgImgCount/5;
-  let domain = [binSize.toFixed(0), (2*binSize).toFixed(0), (3*binSize).toFixed(0), (4*binSize).toFixed(0), maxImgCount.toFixed(0)];
+  let domain = [minImgCount-1, binSize.toFixed(0)-1, (2*binSize).toFixed(0)-1, (3*binSize).toFixed(0)-1, (4*binSize).toFixed(0)-1, maxImgCount.toFixed(0)-1];
   let colorScale = d3.scaleThreshold()
     .domain(domain)
     .range(colorScheme);
@@ -223,15 +220,15 @@ function createBarChart() {
 
   let scaleY = d3.scaleLog([1, 10], [100, 3000]);
 
-  let wChart = 2500;
-  let barH = 350
+  let wChart = w - 100;
+  let barH = 150;
   chartGrp = svg.append("g");
   chartGrp.selectAll("rect").data(dataset).enter().append("rect")
     .attr("x", function(d, i) {
-      return -650 + (i * (wChart / dataset.length));
+      return 50 + (i * (wChart / dataset.length));
     })
-    .attr("y", function(d, i) {
-      return (h-175) - (barH * (scaleY(d.num_entries)/maxImgCount));
+    .attr("y", function(d) {
+      return (h-125) - (barH * (scaleY(d.num_entries)/maxImgCount));
     })
     .attr("width", ((wChart / dataset.length) - ((wChart / dataset.length) * 0.2)))
     .attr("height", function(d) {
@@ -248,29 +245,28 @@ function createBarChart() {
   // draw bar labels
   chartGrp.append("g").selectAll("text").data(dataset).enter().append("text")
     .attr("x", function(d, i) {
-      return -642 + (i * (wChart / dataset.length));
+      return 54 + (i * (wChart / dataset.length));
     })
     .attr("y", function(d) {
-      return (h-179) - (barH * (scaleY(d.num_entries)/maxImgCount));
+      return (h-128) - (barH * (scaleY(d.num_entries)/maxImgCount));
     })
     .text((d) => d.num_entries)
     .style("text-anchor", "middle")
-    .style("font-size", 8)
+    .style("font-size", 4)
     .style("fill", "#000000");
 
   // draw x axis labels
-  let countries = Array.from(imgsMap.keys());
   let scaleX = d3.scaleBand()
-    .domain(countries)
-    .range([-765, wChart-765]);
+    .domain(countryList)
+    .range([-62, wChart-62]);
 
   chartGrp.append("g")
     .attr("transform", "translate(100,100)")
     .call(d3.axisBottom(scaleX)).attr("color", "transparent")
     .selectAll("text")
-    .attr("transform", "translate(0," + (h - 275) + ")rotate(-60)")
+    .attr("transform", "translate(0," + (h - 225) + ")rotate(-60)")
     .style("text-anchor", "end")
-    .style("font-size", 12)
+    .style("font-size", 8)
     .style("fill", "black")
     .style("fill", "black")
 
@@ -280,30 +276,27 @@ function createBarChart() {
   let scaleTxtGrp = svg.append("g");
   scaleTxtGrp.selectAll("text").data(domain).enter().append("text")
     .attr("x", function(d, i) {
-      return 1500 + (i * 50);
+      return 1150 + (i * 25);
     })
-    .attr("y", 75)
-    .text(d => d)
+    .attr("y", 39)
+    .text(d => d+1)
     .style("text-anchor", "middle")
-    .style("font-size", 12)
-    .style("fill", "#000000")
-  scaleTxtGrp.append("text")
-    .attr("x", 1450)
-    .attr("y", 75)
-    .text(minImgCount)
-    .style("text-anchor", "middle")
-    .style("font-size", 12)
+    .style("font-size", 7)
     .style("fill", "#000000")
 
   svg.append("g").selectAll("rect").data(domain).enter().append("rect")
     .attr("x", function(d, i) {
-      return 1450 + (i * 50);
+      return 1150 + (i * 25);
     })
-    .attr("y", 50)
-    .attr("width", 50)
-    .attr("height", 10)
-    .attr("fill", function(d) {
-      return colorScale(d-1);
+    .attr("y", 25)
+    .attr("width", 25)
+    .attr("height", 5)
+    .attr("fill", function(d, i) {
+      if (i < domain.length - 1) {
+        return colorScale(d);
+      } else {
+        return "transparent";
+      }
     });
 }
 
