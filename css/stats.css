@@ -49,3 +49,9 @@ svg text {
   padding-left: 0.5rem;
   font-style: italic;
 }
+
+/* reset btn */
+#reset-btn {
+  margin: auto;
+  margin-top: 1rem;
+}

@@ -1,4 +1,4 @@
-let debug = true;
+let debug = false;
 
 // global vars
 let dataInfoPath = "/GeoGuessd/data/data-info.json";
@@ -84,6 +84,9 @@ function loadSessionHistory(){
     sessionHistory = [];
   } else {
     sessionHistory = JSON.parse(sessionHistory);
+  }
+  if (debug) {
+    sessionHistory = getDummySessionHistory(100);
   }
   console.log("Loaded session history:")
   console.log(sessionHistory);

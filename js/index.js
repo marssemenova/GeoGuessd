@@ -215,7 +215,7 @@ function createBarChart() {
     .range(colorScheme);
 
   let chartZoom = d3.zoom()
-    .scaleExtent([1, 2])
+    .scaleExtent([1, 3])
     .on("zoom", zoomedChart);
 
   let scaleY = d3.scaleLog([1, 10], [100, 3000]);

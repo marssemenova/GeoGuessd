@@ -151,7 +151,9 @@ function saveSession() { // TODO: implement file loading in app.js, have save se
     "answers" : answers
   }
   sessionHistory.unshift(newEntry);
-  localStorage.setItem("sessionHistory", JSON.stringify(sessionHistory));
+  if (!debug) {
+    localStorage.setItem("sessionHistory", JSON.stringify(sessionHistory));
+  }
 
   // reset session
   resetSession();

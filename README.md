@@ -36,7 +36,8 @@ the folder name and may not match the official name.
 - Since the highest number of entries is significantly higher than the number of entries for all the other countries
 everything is scaled logarithmically.
 - If you're too lazy to generate your own data (I know I was) I've included an option to replace the session history data saved in local
-storage with auto generated dummy data. You can enable this by setting the debug variable at the top of `/js/app.js` to `true`.
+storage with auto generated dummy data. You can enable this by setting the debug variable at the top of `/js/app.js` to `true`. Note that
+the reset data button will not work as it will just load in new dummy data.
 
 # Citations
 - Some assets taken from [GeoGuessr.com](https://www.geoguessr.com/)
