@@ -1,4 +1,4 @@
-let debug = false;
+let debug = true;
 
 // global vars
 let dataInfoPath = "/GeoGuessd/data/data-info.json";

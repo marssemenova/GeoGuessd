@@ -1,8 +1,9 @@
 ﻿.hide-element {
   display: none;
 }
+
 #no-history-err-container {
-  padding-top: 4rem;
+  padding-top: 3rem;
   margin: auto;
   width: fit-content;
 }
@@ -17,10 +18,6 @@
   width: 90%;
   margin: auto;
   height: 20vw;
-  background: white;
-}
-
-#stats-chart-container svg {
   background: white;
 }
 
@@ -54,4 +51,126 @@ svg text {
 #reset-btn {
   margin: auto;
   margin-top: 1rem;
+  margin-bottom: 8rem;
+}
+
+/* top row styles */
+#tables-container {
+  display: flex;
+  margin-bottom: 5rem;
+  justify-content: space-evenly;
+}
+
+/* pie chart */
+#percentage-chart-container {
+  width: 15%;
+  align-content: center;
+}
+
+#percentage-chart {
+  width: 100%;
+  height: 0;
+  padding-bottom: 100%;
+  margin: auto;
+  background: white;
+}
+
+#percentage-chart svg {
+  background: white;
+}
+
+/* lists */
+#tables-container h2 {
+  width: fit-content;
+  margin: auto;
+  padding-top: 0.5rem;
+}
+
+#worst-countries-container {
+  width: 25%;
+}
+
+#worst-countries {
+  width: 100%;
+  background-color: white;
+  color: black;
+}
+
+#worst-countries h2, #worst-countries p {
+  color: red;
+}
+
+#best-countries-container {
+  width: 25%;
+}
+
+#best-countries {
+  width: 100%;
+  background-color: white;
+  color: black;
+}
+
+#best-countries h2, #best-countries p {
+  color: var(--link-colour);
+}
+
+.rank-list {
+  margin: 0;
+  padding: 0 1.2rem 0.5rem 2.8rem;
+  font-size: 1.2rem;
+}
+
+.rank-list h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  padding-right: 0.5rem;
+}
+.rank-list p {
+  margin: 0;
+}
+
+.rank-list .li-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+#recent-sessions {
+  background-color: white;
+  color: black;
+}
+
+#recent-sessions-list {
+  list-style: none;
+  padding: 0 1.2rem 0.5rem 1.2rem;
+  margin: 0;
+}
+
+#recent-sessions-list .li-container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 3rem;
+}
+
+#recent-sessions-list .svg-container {
+  width: 5rem;
+  margin: 0.2rem 0;
+  background: var(--no-data-gray);
+  height: 90%;
+}
+
+#recent-sessions-list p {
+  margin: 0;
+}
+
+#recent-sessions-list .li-container > :first-child {
+  padding-right: 0.5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 7.5rem;
+}
+
+#recent-sessions-list div + p {
+  color: var(--link-colour);
+  padding-left: 0.5rem;
 }

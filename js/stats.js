@@ -58,7 +58,7 @@ async function setContent() {
   await loadData();
   loadSessionHistory();
   if (sessionHistory.length !== 0) {
-    document.getElementById("no-history-err").classList.add("hide-element");
+    document.getElementById("no-history-err-container").classList.add("hide-element");
     document.getElementById("session-data-container").classList.remove("hide-element");
     document.getElementById("reset-btn").addEventListener("click", function(e) {
       if (!debug) {
@@ -115,6 +115,8 @@ function processCountryStats() {
       minAnswerCount = numAnswers;
     }
   }
+
+  countryStats = Array.from(countryStats);
 }
 
 /**
@@ -125,24 +127,70 @@ function createPercentageChart() {
 }
 
 /**
- * Fill in the recent sessions table.
- */
-function fillRecentSessionTable() {
-
-}
-
-/**
  * Fill in the best countries table.
  */
 function fillBestCountriesTable() {
-
+  let bestCountriesTable = document.getElementById("best-countries-list");
+  fillRankTable(bestCountriesTable, sortByNumCorrect, true);
 }
 
 /**
  * Fill in the worst countries table.
  */
 function fillWorstCountriesTable() {
+  let worstCountriesTable = document.getElementById("worst-countries-list");
+  fillRankTable(worstCountriesTable, sortByNumWrong, false);
+}
 
+/**
+ * Helper function to fill the rank tables
+ * @param table Table to fill.
+ * @param sortFunc Sort function to use on the data.
+ * @param isBest Use to indicate which table to fill.
+ */
+function fillRankTable(table, sortFunc, isBest) {
+  let data = countryStats.sort(sortFunc);
+
+  let country, percentage, li;
+  for (let x = 0; x < 10; x++) {
+    country = data[x][0];
+    percentage = (isBest ? data[x][1].correct : data[x][1].wrong) / (data[x][1].correct + data[x][1].wrong) * 100;
+    li = table.children[x].children[0];
+    li.children[0].innerText = country;
+    li.children[1].innerText = Math.round(percentage) + "%";
+  }
+}
+
+/**
+ * Fill in the recent sessions table.
+ */
+function fillRecentSessionTable() {
+  let recentSessionsTable = document.getElementById("recent-sessions-list");
+
+  let time, percentage, li;
+  let svgContainer, w, h;
+  for (let x = 0; x < 10; x++) {
+    li = recentSessionsTable.children[x].children[0];
+
+    // set time
+    time = new Date(sessionHistory[x].time);
+    li.children[0].innerText = x + time.getHours() + ":" + time.getMinutes() + " " + time.getDate() + "/" + (time.getMonth()+1) + "/" + (time.getFullYear().toString()).substring(2);
+    // set svg
+    svgContainer = li.children[0];
+    w = svgContainer.offsetWidth;
+    h = svgContainer.offsetHeight;
+
+    let svg = d3.select("#session-his-" + (x+1))
+      .append("svg")
+      .attr("width", w)
+      .attr("height", h)
+      .attr("viewBox", "0 0 " + w + " " + h)
+      .attr("preserveAspectRatio", "xMidYMid meet")
+
+    // set
+    percentage = sessionHistory[x].wrong/(sessionHistory[x].correct + sessionHistory[x].wrong) * 100;
+    li.children[2].innerText = Math.round(percentage) + "%";
+  }
 }
 
 /**
@@ -171,10 +219,9 @@ function createStatsChart() {
   observer.observe(chartContainer)
 
   // gen different sorts
-  let statsData = Array.from(countryStats);
-  let sortByNumAnswersChart = drawStatsChart(statsData, 1);
-  let sortByNumCorrectChart = drawStatsChart(statsData, 2);
-  let sortByNumWrongChart = drawStatsChart(statsData, 3);
+  let sortByNumAnswersChart = drawStatsChart(countryStats, 1);
+  let sortByNumCorrectChart = drawStatsChart(countryStats, 2);
+  let sortByNumWrongChart = drawStatsChart(countryStats, 3);
 
   sortByNumCorrectChart.attr("opacity", 0);
   sortByNumWrongChart.attr("opacity", 0);

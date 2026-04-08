@@ -3,9 +3,6 @@
   width: 80%;
   margin: auto;
   height: 40vw;
-}
-
-#map-container svg {
   background: white;
 }
 
@@ -22,10 +19,6 @@
   width: 90%;
   margin: auto;
   height: 20vw;
-  background: white;
-}
-
-#chart-container svg {
   background: white;
 }
 
