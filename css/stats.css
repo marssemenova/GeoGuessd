@@ -148,15 +148,19 @@ svg text {
 #recent-sessions-list .li-container {
   display: flex;
   justify-content: flex-start;
-  align-items: center;
-  height: 3rem;
+  align-items: end;
+  height: 1.7rem;
 }
 
 #recent-sessions-list .svg-container {
   width: 5rem;
   margin: 0.2rem 0;
   background: var(--no-data-gray);
-  height: 90%;
+  height: 100%;
+}
+
+#recent-sessions-list .svg-container svg {
+  background: white;
 }
 
 #recent-sessions-list p {

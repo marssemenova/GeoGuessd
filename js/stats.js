@@ -154,10 +154,18 @@ function fillRankTable(table, sortFunc, isBest) {
   let country, percentage, li;
   for (let x = 0; x < 10; x++) {
     country = data[x][0];
-    percentage = (isBest ? data[x][1].correct : data[x][1].wrong) / (data[x][1].correct + data[x][1].wrong) * 100;
     li = table.children[x].children[0];
+    if (data[x][1].correct + data[x][1].wrong === 0 || (isBest ? data[x][1].correct : data[x][1].wrong) === 0) {
+      percentage = 0;
+      li.children[1].innerText = "0%";
+    } else {
+      percentage = (isBest ? data[x][1].correct : data[x][1].wrong) / (data[x][1].correct + data[x][1].wrong) * 100;
+      li.children[1].innerText = Math.round(percentage) + "%";
+      if (percentage === 0) {
+        li.children[1].innerText = "<1%";
+      }
+    }
     li.children[0].innerText = country;
-    li.children[1].innerText = Math.round(percentage) + "%";
   }
 }
 
@@ -167,16 +175,17 @@ function fillRankTable(table, sortFunc, isBest) {
 function fillRecentSessionTable() {
   let recentSessionsTable = document.getElementById("recent-sessions-list");
 
-  let time, percentage, li;
+  let time, tot, percentage, li;
   let svgContainer, w, h;
   for (let x = 0; x < 10; x++) {
     li = recentSessionsTable.children[x].children[0];
 
     // set time
     time = new Date(sessionHistory[x].time);
-    li.children[0].innerText = x + time.getHours() + ":" + time.getMinutes() + " " + time.getDate() + "/" + (time.getMonth()+1) + "/" + (time.getFullYear().toString()).substring(2);
+    li.children[0].innerText = time.getHours() + ":" + time.getMinutes() + " " + time.getDate() + "/" + (time.getMonth()+1) + "/" + (time.getFullYear().toString()).substring(2);
+
     // set svg
-    svgContainer = li.children[0];
+    svgContainer = li.children[1];
     w = svgContainer.offsetWidth;
     h = svgContainer.offsetHeight;
 
@@ -186,10 +195,38 @@ function fillRecentSessionTable() {
       .attr("height", h)
       .attr("viewBox", "0 0 " + w + " " + h)
       .attr("preserveAspectRatio", "xMidYMid meet")
+    tot = sessionHistory[x].correct + sessionHistory[x].wrong;
+    if (tot === 0) {
+      percentage = 0
+    } else {
+      percentage = sessionHistory[x].correct / tot;
+    }
+    svg.append("rect")
+      .attr("x", 0)
+      .attr("y", h-h/2.5)
+      .attr("width", percentage*w)
+      .attr("height", h/2.5)
+      .attr("fill", "var(--link-colour)")
+    svg.append("rect")
+      .attr("x", percentage*w)
+      .attr("y", h - h/2.5)
+      .attr("width", (1-percentage)*w)
+      .attr("height", h/2.5)
+      .attr("fill", "red")
+    svg.append("text")
+      .attr("x", w/2)
+      .attr("y", h/2)
+      .text(tot)
+      .style("text-anchor", "middle")
+      .style("font-size", 9)
+      .style("fill", "#000000");
 
-    // set
-    percentage = sessionHistory[x].wrong/(sessionHistory[x].correct + sessionHistory[x].wrong) * 100;
-    li.children[2].innerText = Math.round(percentage) + "%";
+    // set percentage
+    if (percentage !== 0 && Math.round(percentage * 100) === 0) {
+      li.children[2].innerText = "<1%";
+    } else {
+      li.children[2].innerText = Math.round(percentage * 100) + "%";
+    }
   }
 }
 
@@ -365,14 +402,14 @@ function drawStatsChart(statsData, whichSort) {
         return "0%";
       }
       if (whichSort === 2) {
-        if (Math.round(d[1].correct/(d[1].correct + d[1].wrong)*100) === 1) {
-          return "1%";
+        if (d[1].correct !== 0 && Math.round(d[1].correct/(d[1].correct + d[1].wrong)*100) === 0) {
+          return "<1%";
         }
         return Math.round(d[1].correct/(d[1].correct + d[1].wrong)*100) + "%";
       }
       if (whichSort === 3) {
-        if (Math.round(d[1].wrong/(d[1].correct + d[1].wrong)*100) === 1) {
-          return "1%";
+        if (d[1].wrong !== 0 && Math.round(d[1].wrong/(d[1].correct + d[1].wrong)*100) === 0) {
+          return "<1%";
         }
         return Math.round(d[1].wrong/(d[1].correct + d[1].wrong)*100) + "%";
       }
