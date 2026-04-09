@@ -257,7 +257,8 @@ function fillRecentSessionTable() {
 
     // set time
     time = new Date(sessionHistory[x].time);
-    li.children[0].innerText = time.getHours() + ":" + time.getMinutes() + " " + time.getDate() + "/" + (time.getMonth()+1) + "/" + (time.getFullYear().toString()).substring(2);
+    let mins =
+    li.children[0].innerText = time.getHours() + ":" + ("0" + time.getMinutes()).slice(-2) + " " + time.getDate() + "/" + (time.getMonth()+1) + "/" + (time.getFullYear().toString()).substring(2);
 
     // set svg
     svgContainer = li.children[1];
@@ -392,7 +393,7 @@ function drawStatsChart(statsData, whichSort) {
   let svg = d3.select("#stats-chart").append("g");
 
   let wChart = w - 100;
-  let barH = 150;
+  let barH = h*0.45;
   let chartGrp = svg.append("g").attr("id", "stats-chart-grp-" + whichSort);
   chartGrp.append("g").selectAll("rect").data(statsData).enter().append("rect")
     .attr("x", function(d, i) {
