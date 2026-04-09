@@ -18,16 +18,23 @@ let sortByNumCorrect = function (a, b) { // 2
   let bCorrect = b[1].correct;
   let aTot = a[1].correct + a[1].wrong;
   let bTot = b[1].correct + b[1].wrong;
-  if (!(aTot === 0 && bTot === 0) && aCorrect/aTot !== bCorrect/bTot) {
-    if (aTot === 0) {
+  if (!(aTot === 0 || bTot === 0) && aCorrect/aTot !== bCorrect/bTot) {
+    if (aCorrect === 0) {
       return 1;
     }
-    if (bTot === 0) {
+    if (bCorrect === 0) {
       return -1;
     }
     return aCorrect/aTot < bCorrect/bTot ? 1 : -1;
   } else {
-    return aCorrect < bCorrect ? 1 : -1;
+    if (aCorrect !== bCorrect) {
+      return aCorrect < bCorrect ? 1 : -1;
+    } else {
+      if (aTot !== bTot) {
+        return aTot < bTot ? 1 : -1;
+      }
+      return a[0] > b[0] ? 1 : -1;
+    }
   }
 };
 let sortByNumWrong = function (a, b) { // 3
@@ -35,16 +42,23 @@ let sortByNumWrong = function (a, b) { // 3
   let bWrong = b[1].wrong;
   let aTot = a[1].correct + a[1].wrong;
   let bTot = b[1].correct + b[1].wrong;
-  if (!(aTot === 0 && bTot === 0) && aWrong/aTot !== bWrong/bTot) {
-    if (aTot === 0) {
+  if (!(aTot === 0 || bTot === 0) && aWrong/aTot !== bWrong/bTot) {
+    if (aWrong === 0) {
       return 1;
     }
-    if (bTot === 0) {
+    if (bWrong === 0) {
       return -1;
     }
     return aWrong/aTot < bWrong/bTot ? 1 : -1;
   } else {
-    return aWrong < bWrong ? 1 : -1;
+    if (aWrong !== bWrong) {
+      return aWrong < bWrong ? 1 : -1;
+    } else {
+      if (aTot != bTot) {
+        return aTot < bTot ? 1 : -1;
+      }
+      return a[0] > b[0] ? 1 : -1;
+    }
   }
 };
 
@@ -123,7 +137,56 @@ function processCountryStats() {
  * Create the percentage pie chart.
  */
 function createPercentageChart() {
+  let percentageChartContainer = document.getElementById("percentage-chart");
+  let w = percentageChartContainer.offsetWidth;
+  let h = percentageChartContainer.offsetHeight;
 
+  let svg = d3.select("#percentage-chart")
+    .append("svg")
+    .attr("width", w)
+    .attr("height", h)
+    .attr("viewBox", "0 0 " + w + " " + h)
+    .attr("preserveAspectRatio", "xMidYMid meet")
+
+  // calc tot correct + wrong
+  let totCorrect = 0, totWrong = 0;
+  for (let x = 0; x < sessionHistory.length; x++) {
+    totCorrect += sessionHistory[x].correct;
+    totWrong += sessionHistory[x].wrong;
+  }
+
+  // setup params
+  let r = Math.min(w, h) / 2 - 20;
+  let data = {"totCorrect": totCorrect, "totWrong": totWrong};
+  let colour = d3.scaleOrdinal()
+    .domain(["totCorrect", "totWrong"])
+    .range(["var(--link-colour)", "red"]);
+  let pie = d3.pie().sort(null).value((d) => d[1]);
+  let arcs = d3.arc()
+    .innerRadius(r/2)
+    .outerRadius(r);
+
+  // build pie chart
+  svg.append("g").selectAll("slices").data(pie(Object.entries(data))).enter().append("path")
+    .attr("d", arcs)
+    .attr("fill", function(d) {
+      return colour(d.data[0]);
+    })
+    .attr("transform", "translate(" + w/2 + "," + h/2 + ")");
+
+  // add text
+  let percentage = Math.round(totCorrect/(totCorrect+totWrong)*100);
+  if (totCorrect !== 0 && percentage === 0) {
+    percentage = "<1"
+  }
+  svg.append("text")
+    .attr("x", w/2)
+    .attr("y", h/2 + 7)
+    .text(percentage + "%")
+    .style("text-anchor", "middle")
+    .style("font-size", 24)
+    .style("font-weight", "bold")
+    .style("fill", "var(--link-colour)");
 }
 
 /**
@@ -154,6 +217,7 @@ function fillRankTable(table, sortFunc, isBest) {
   let country, percentage, li;
   for (let x = 0; x < 10; x++) {
     country = data[x][0];
+    console.log(data, data[x], data[x][0], country, x);
     li = table.children[x].children[0];
     if (data[x][1].correct + data[x][1].wrong === 0 || (isBest ? data[x][1].correct : data[x][1].wrong) === 0) {
       percentage = 0;
@@ -177,8 +241,9 @@ function fillRecentSessionTable() {
 
   let time, tot, percentage, li;
   let svgContainer, w, h;
-  for (let x = 0; x < 10; x++) {
+  for (let x = 0; x < (sessionHistory.length < 10 ? sessionHistory.length : 10); x++) {
     li = recentSessionsTable.children[x].children[0];
+    li.style.visibility = "visible";
 
     // set time
     time = new Date(sessionHistory[x].time);

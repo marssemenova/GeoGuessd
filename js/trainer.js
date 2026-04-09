@@ -50,6 +50,9 @@ async function loadImage() {
   let randInd = Math.floor(Math.random() * imgsSet.length);
   currImg.src = imgsPath + imgsSet[randInd].country + "/" + imgsSet[randInd].file;
   currCountry = imgsSet[randInd].country;
+  if (cheatsEnabled) {
+    console.log(currCountry);
+  }
   textbox.value = "";
   textbox.disabled = false;
 }
@@ -74,6 +77,28 @@ function eventHandlingSetup() {
       checkBtn.classList.add("white-btn-active")
     }
   });
+
+  textbox.addEventListener("keyup", function(e) {
+
+  });
+
+  window.addEventListener("keyup",function(e) {
+    // enter after check
+    if (e.code === "Enter" && textbox.disabled) {
+      if (answers.length === 1) {
+        saveSessionBtn.classList.remove("inactive-btn");
+        saveSessionBtn.classList.add("green-btn-active")
+        resetSessionBtn.classList.remove("inactive-btn");
+        resetSessionBtn.classList.add("red-btn-active")
+      }
+      loadImage();
+    } else {
+      // enter in textbox
+      if (e.code === "Enter") {
+        checkAnswer(textbox.value);
+      }
+    }
+  })
 
   // save session btn
   saveSessionBtn.addEventListener("click", function(e) {

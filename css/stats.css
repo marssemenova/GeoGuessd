@@ -150,6 +150,7 @@ svg text {
   justify-content: flex-start;
   align-items: end;
   height: 1.7rem;
+  visibility: hidden;
 }
 
 #recent-sessions-list .svg-container {

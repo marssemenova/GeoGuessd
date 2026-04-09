@@ -1,4 +1,5 @@
-let debug = true;
+let debug = false;
+let cheatsEnabled = false;
 
 // global vars
 let dataInfoPath = "/GeoGuessd/data/data-info.json";
