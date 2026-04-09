@@ -78,10 +78,7 @@ function eventHandlingSetup() {
     }
   });
 
-  textbox.addEventListener("keyup", function(e) {
-
-  });
-
+  // enter key functionality
   window.addEventListener("keyup",function(e) {
     // enter after check
     if (e.code === "Enter" && textbox.disabled) {
@@ -162,7 +159,11 @@ function checkAnswer(answer) {
     textbox.classList.add("wrong-ans");
   }
 }
-function saveSession() { // TODO: implement file loading in app.js, have save session btn
+
+/**
+ * Save session to local storage on btn press.
+ */
+function saveSession() {
   if (!sessionHistoryLoaded) {
     loadSessionHistory();
     sessionHistoryLoaded = true;
@@ -184,7 +185,10 @@ function saveSession() { // TODO: implement file loading in app.js, have save se
   resetSession();
 }
 
-function resetSession() { // TODO: implement file loading in app.js, have save session btn
+/**
+ * Reset session on btn press.
+ */
+function resetSession() {
   answers = [];
   correct = 0;
   wrong = 0;

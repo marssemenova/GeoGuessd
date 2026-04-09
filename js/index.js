@@ -276,7 +276,7 @@ function createBarChart() {
   let scaleTxtGrp = svg.append("g");
   scaleTxtGrp.selectAll("text").data(domain).enter().append("text")
     .attr("x", function(d, i) {
-      return 1150 + (i * 25);
+      return (w-250)  + (i * 25);
     })
     .attr("y", 39)
     .text(d => d+1)
@@ -286,7 +286,7 @@ function createBarChart() {
 
   svg.append("g").selectAll("rect").data(domain).enter().append("rect")
     .attr("x", function(d, i) {
-      return 1150 + (i * 25);
+      return (w-250) + (i * 25);
     })
     .attr("y", 25)
     .attr("width", 25)

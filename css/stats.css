@@ -1,7 +1,4 @@
-﻿.hide-element {
-  display: none;
-}
-
+﻿/* no history styles */
 #no-history-err-container {
   padding-top: 3rem;
   margin: auto;
@@ -38,7 +35,7 @@ svg text {
 
 #sort-btn {
   font-size: 0.7rem !important;
-  padding: 0.3rem 0.8rem;
+  padding: 0.3rem 0.8rem !important;
 }
 
 #sort-type-text {
@@ -57,8 +54,10 @@ svg text {
 /* top row styles */
 #tables-container {
   display: flex;
-  margin-bottom: 5rem;
   justify-content: space-evenly;
+  width: 90%;
+  margin: auto;
+  margin-bottom: 5rem;
 }
 
 /* pie chart */
@@ -72,10 +71,6 @@ svg text {
   height: 0;
   padding-bottom: 100%;
   margin: auto;
-  background: white;
-}
-
-#percentage-chart svg {
   background: white;
 }
 

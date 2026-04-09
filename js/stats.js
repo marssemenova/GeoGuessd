@@ -141,12 +141,23 @@ function createPercentageChart() {
   let w = percentageChartContainer.offsetWidth;
   let h = percentageChartContainer.offsetHeight;
 
+  console.log(w, h);
   let svg = d3.select("#percentage-chart")
     .append("svg")
     .attr("width", w)
     .attr("height", h)
     .attr("viewBox", "0 0 " + w + " " + h)
     .attr("preserveAspectRatio", "xMidYMid meet")
+    .attr("id", "percentage-chart-svg")
+  let chartSVGElement2 = document.getElementById("percentage-chart-svg");
+
+  // set up an observer
+  let observer2 = new ResizeObserver(entries => {
+    let e = entries[0];
+    chartSVGElement2.setAttribute("width", e.contentRect.width);
+    chartSVGElement2.setAttribute("height", e.contentRect.width);
+  })
+  observer2.observe(percentageChartContainer)
 
   // calc tot correct + wrong
   let totCorrect = 0, totWrong = 0;
@@ -217,7 +228,6 @@ function fillRankTable(table, sortFunc, isBest) {
   let country, percentage, li;
   for (let x = 0; x < 10; x++) {
     country = data[x][0];
-    console.log(data, data[x], data[x][0], country, x);
     li = table.children[x].children[0];
     if (data[x][1].correct + data[x][1].wrong === 0 || (isBest ? data[x][1].correct : data[x][1].wrong) === 0) {
       percentage = 0;

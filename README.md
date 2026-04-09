@@ -10,7 +10,7 @@ a training tool which keeps track of performance and visualizes it.
 ### 1. Download the code
 ### 2. Download the data
 
-Since I felt it would have created too many dependencies to automate this step with Python
+Since I felt it would have created too many dependencies to automate this step
 you will have to manually download the dataset, unzip it, and place it in the `/data/images/` folder.
 The dataset can be downloaded as a `.zip` from
 [here](https://www.kaggle.com/datasets/ubitquitin/geolocation-geoguessr-images-50k?resource=download).
@@ -23,7 +23,7 @@ like this when you've done this:
 # Usage
 1. You will need to run a local server to display the webpage. There are many ways to do this but the suggested
 method is to use WAMP as this is what was used in development.
-2. Open `index.html` to view the homepage.
+2. Open `/GeoGuessd/index.html` to view the homepage.
 
 # Notes
 - Since I had a medical emergency I didn't have quite as much time as I would like to work on
@@ -32,12 +32,13 @@ instead I have written a bash script that does what Node.js or a database would 
 about the data to a `.json` file. Running it once whenever the data is updated is sufficient.
 - I omitted some regions (Martinique, Reunion, Svalbard and Jan Mayen) since the map didn't have information for them and it is beyond my capabilities
 and the scope of this project for me to add them myself. Some names in the map data have also been changed to match
-the folder name and may not match the official name.
+the folder name for ease of use and may not match the official name.
 - Since the highest number of entries is significantly higher than the number of entries for all the other countries
 everything is scaled logarithmically.
 - If you're too lazy to generate your own data (I know I was) I've included an option to replace the session history data saved in local
-storage with auto generated dummy data. You can enable this by setting the debug variable at the top of `/js/app.js` to `true`. Note that
+storage with auto generated dummy data. You can enable this by setting the `debug` variable at the top of `/js/app.js` to `true`. Note that
 the reset data button will not work as it will just load in new dummy data.
+- You can print the country of the displayed image in the trainer by setting `cheatsEnabled` in `/js/app.js` to `true`
 
 # Citations
 - Some assets taken from [GeoGuessr.com](https://www.geoguessr.com/)

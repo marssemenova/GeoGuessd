@@ -4,7 +4,7 @@
   --dark-purp: rgb(16 16 28/100%);
   --no-data-gray: #cfcfcf;
   --inactive-gray: #5a5a5a;
-  --link-colour: #97e851;
+  --link-colour: #92df4f;
 }
 
 /* general styles */
@@ -16,6 +16,10 @@ body {
   font-weight: normal;
   font-style: normal;
   color: white;
+}
+
+.hide-element {
+  display: none;
 }
 
 /* nav bar */
@@ -105,8 +109,9 @@ nav ul li a {
   padding: 0.5rem 1rem;
   width: fit-content;
   border-radius: 2rem;
-  border: 0.1rem solid white;
+  border: 0.14rem solid white;
   user-select: none;
+  height: fit-content;
 }
 
 .green-btn-active:hover, .red-btn-active:hover {
