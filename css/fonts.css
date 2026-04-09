@@ -1,6 +1,6 @@
 ﻿@font-face {
   font-family: ggFont;
-  src: url('/GeoGuessd/fonts/ggFont.woff2') format("woff2");
+  src: url('../fonts/ggFont.woff2') format("woff2");
   font-display: swap;
   font-weight: 400;
   font-style: normal;
@@ -12,7 +12,7 @@
   font-family: 'Futura PT Book';
   font-style: normal;
   font-weight: normal;
-  src: local('Futura PT Book'), url('/GeoGuessd/fonts/futura/FuturaCyrillicBook.woff') format('woff');
+  src: local('Futura PT Book'), url('../fonts/futura/FuturaCyrillicBook.woff') format('woff');
 }
 
 
@@ -20,7 +20,7 @@
   font-family: 'Futura PT Light';
   font-style: normal;
   font-weight: normal;
-  src: local('Futura PT Light'), url('/GeoGuessd/fonts/futura/FuturaCyrillicLight.woff') format('woff');
+  src: local('Futura PT Light'), url('../fonts/futura/FuturaCyrillicLight.woff') format('woff');
 }
 
 
@@ -28,7 +28,7 @@
   font-family: 'Futura PT Medium';
   font-style: normal;
   font-weight: normal;
-  src: local('Futura PT Medium'), url('/GeoGuessd/fonts/futura/FuturaCyrillicMedium.woff') format('woff');
+  src: local('Futura PT Medium'), url('../fonts/futura/FuturaCyrillicMedium.woff') format('woff');
 }
 
 
@@ -36,7 +36,7 @@
   font-family: 'Futura PT Demi';
   font-style: normal;
   font-weight: normal;
-  src: local('Futura PT Demi'), url('/GeoGuessd/fonts/futura/FuturaCyrillicDemi.woff') format('woff');
+  src: local('Futura PT Demi'), url('../fonts/futura/FuturaCyrillicDemi.woff') format('woff');
 }
 
 
@@ -44,7 +44,7 @@
   font-family: 'Futura PT Heavy';
   font-style: normal;
   font-weight: normal;
-  src: local('Futura PT Heavy'), url('/GeoGuessd/fonts/futura/FuturaCyrillicHeavy.woff') format('woff');
+  src: local('Futura PT Heavy'), url('../fonts/futura/FuturaCyrillicHeavy.woff') format('woff');
 }
 
 
@@ -52,7 +52,7 @@
   font-family: 'Futura PT Bold';
   font-style: normal;
   font-weight: normal;
-  src: local('Futura PT Bold'), url('/GeoGuessd/fonts/futura/FuturaCyrillicBold.woff') format('woff');
+  src: local('Futura PT Bold'), url('../fonts/futura/FuturaCyrillicBold.woff') format('woff');
 }
 
 
@@ -60,5 +60,5 @@
   font-family: 'Futura PT Extra Bold';
   font-style: normal;
   font-weight: normal;
-  src: local('Futura PT Extra Bold'), url('/GeoGuessd/fonts/futura/FuturaCyrillicExtraBold.woff') format('woff');
+  src: local('Futura PT Extra Bold'), url('../fonts/futura/FuturaCyrillicExtraBold.woff') format('woff');
 }

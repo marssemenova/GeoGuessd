@@ -1,10 +1,11 @@
 let debug = false;
 let cheatsEnabled = false;
+let pathPrefix = "" // /GeoGuessd
 
 // global vars
-let dataInfoPath = "/GeoGuessd/data/data-info.json";
-let imgsPath = "/GeoGuessd/data/images/";
-let mapInfoFile = "/GeoGuessd/data/ne_10m_admin_0_countries.json";
+let dataInfoPath = pathPrefix + "/data/data-info.json";
+let imgsPath = pathPrefix + "/data/images/";
+let mapInfoFile = pathPrefix + "/data/ne_10m_admin_0_countries.json";
 let dataset = null;
 let imgsMap = new Map();
 let countryList = null;

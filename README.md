@@ -23,7 +23,7 @@ like this when you've done this:
 # Usage
 1. You will need to run a local server to display the webpage. There are many ways to do this but the suggested
 method is to use WAMP as this is what was used in development.
-2. Open `/GeoGuessd/index.html` to view the homepage.
+2. Open `index.html` to view the homepage.
 
 # Notes
 - Since I had a medical emergency I didn't have quite as much time as I would like to work on

@@ -63,7 +63,7 @@ async function loadImage() {
 function eventHandlingSetup() {
   // stats btn
   statsBtn.addEventListener("click", function(e) {
-    window.location.href = "/GeoGuessd/pages/stats.html";
+    window.location.href = "stats.html";
   });
 
   // input field

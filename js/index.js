@@ -94,7 +94,7 @@ async function createMap() {
       })
       .on("click", function (e, d) {
         if (imgsMap.has(d.properties.ADMIN)) {
-          window.location.href = "/GeoGuessd/pages/gallery.html?country=" + d.properties.ADMIN.replaceAll(" ", "%20");
+          window.location.href = pathPrefix + "pages/gallery.html?country=" + d.properties.ADMIN.replaceAll(" ", "%20");
         }
       })
 
@@ -239,7 +239,7 @@ function createBarChart() {
     })
     .attr("class", "chart-bar")
     .on("click", function (e, d) {
-      window.location.href = "/GeoGuessd/pages/gallery.html?country=" + d.country.replaceAll(" ", "%20");
+      window.location.href = pathPrefix + "pages/gallery.html?country=" + d.country.replaceAll(" ", "%20");
     });
 
   // draw bar labels
