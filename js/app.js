@@ -1,6 +1,6 @@
 let debug = false;
 let cheatsEnabled = false;
-let pathPrefix = "" // /GeoGuessd
+let pathPrefix = "" // may be used to augment path (e.g. /GeoGuessd)
 
 // global vars
 let dataInfoPath = pathPrefix + "/data/data-info.json";

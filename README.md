@@ -22,7 +22,8 @@ like this when you've done this:
 
 # Usage
 1. You will need to run a local server to display the webpage. There are many ways to do this but the suggested
-method is to use WAMP as this is what was used in development.
+method is to use WAMP as this is what was used in development. If for any reason you need to change the prefix of the
+application, there is a variable `pathPrefix` at the top of `/js/app.js` may be of use.
 2. Open `index.html` to view the homepage.
 
 # Notes
@@ -34,11 +35,11 @@ about the data to a `.json` file. Running it once whenever the data is updated i
 and the scope of this project for me to add them myself. Some names in the map data have also been changed to match
 the folder name for ease of use and may not match the official name.
 - Since the highest number of entries is significantly higher than the number of entries for all the other countries
-everything is scaled logarithmically.
+the bar charts are scaled logarithmically and the colour scale uses a threshold scale based on the average number of images per country.
 - If you're too lazy to generate your own data (I know I was) I've included an option to replace the session history data saved in local
 storage with auto generated dummy data. You can enable this by setting the `debug` variable at the top of `/js/app.js` to `true`. Note that
 the reset data button will not work as it will just load in new dummy data.
-- You can print the country of the displayed image in the trainer by setting `cheatsEnabled` in `/js/app.js` to `true`
+- You can print the country of the displayed image in the trainer by setting `cheatsEnabled` at the top of `/js/app.js` to `true`
 
 # Citations
 - Some assets taken from [GeoGuessr.com](https://www.geoguessr.com/)
