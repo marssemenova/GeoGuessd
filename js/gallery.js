@@ -31,7 +31,7 @@ async function loadGallery() {
   imgs = imgsMap.get(country);
   imgs.forEach((img, i) => {
     let newImg = document.createElement("img");
-    newImg.src = imgsPath + country + "/" + img;
+    newImg.src = ".." + imgsPath + country + "/" + img;
     newImg.alt = "Image of " + country + ".";
     newImg.classList.add("gallery-img");
     newImg.addEventListener("click", function () {
@@ -50,7 +50,7 @@ async function loadGallery() {
  */
 function createViewer() {
   // set first image
-  imgViewer.src = imgsPath + country + "/" + imgs[currImg];
+  imgViewer.src = ".." + imgsPath + country + "/" + imgs[currImg];
   imgViewer.alt = "Image of " + country + ".";
 
   // add event listeners to next/prev btns
@@ -78,5 +78,5 @@ function updateViewer() {
     currImg = 0;
   }
 
-  imgViewer.src = imgsPath + country + "/" + imgs[currImg];
+  imgViewer.src = ".." + imgsPath + country + "/" + imgs[currImg];
 }

@@ -221,7 +221,7 @@ function createBarChart() {
   let scaleY = d3.scaleLog([1, 10], [100, 3000]);
 
   let wChart = w - 100;
-  let barH = 150;
+  let barH = h*0.45;
   chartGrp = svg.append("g");
   chartGrp.selectAll("rect").data(dataset).enter().append("rect")
     .attr("x", function(d, i) {
